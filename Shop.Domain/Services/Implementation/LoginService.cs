@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Shop.Domain.Services.Implementation
 {
@@ -27,12 +29,17 @@ namespace Shop.Domain.Services.Implementation
         public UserAuthenticateResponse Authenticate(UserAuthenticateRequest request)
         {
             var user = repository.GetByIdAsync(request.Login).Result;
+            string decryptedPassword = string.Empty;
 
-            if (user != null && user.Password == request.Password)
+            if (user != null)
             {
-                var token = configuration.GenerateJwtToken(user);
+                decryptedPassword = ToHash(request.Password);
 
-                return new UserAuthenticateResponse(user, token);
+                if (user.Password == decryptedPassword)
+                {
+                    var token = configuration.GenerateJwtToken(user);
+                    return new UserAuthenticateResponse(user, token);
+                }
             }
 
             return null!;
@@ -41,17 +48,32 @@ namespace Shop.Domain.Services.Implementation
 
         public async Task<UserAuthenticateResponse> Register(User user)
         {
-            var addedUser = await repository.AddAsync(user);
+            string userPassword = user.Password;
+            
+            user.Password = ToHash(userPassword);
 
+            await repository.AddAsync(user);
             await repository.SaveChangesAsync();
 
             var response = Authenticate(new UserAuthenticateRequest
             {
                 Login = user.Login,
-                Password = user.Password
+                Password = userPassword
             });
 
             return response;
+        }
+
+        private string ToHash(string key)
+        {
+            string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: key,
+                salt: Encoding.ASCII.GetBytes(configuration["Jwt:Key"]),
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100,
+                numBytesRequested: 256 / 8));
+
+            return hash;
         }
     }
 }
