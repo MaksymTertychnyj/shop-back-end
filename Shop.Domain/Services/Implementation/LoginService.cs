@@ -26,14 +26,13 @@ namespace Shop.Domain.Services.Implementation
             this.configuration = configuration;
         }
 
-        public UserAuthenticateResponse Authenticate(UserAuthenticateRequest request)
+        public async Task<UserAuthenticateResponse> Authenticate(UserAuthenticateRequest request)
         {
-            var user = repository.GetByIdAsync(request.Login).Result;
-            string decryptedPassword = string.Empty;
+            User? user =await repository.GetByIdAsync(request.Login);
 
             if (user != null)
             {
-                decryptedPassword = ToHash(request.Password);
+                string decryptedPassword = ToHash(request.Password);
 
                 if (user.Password == decryptedPassword)
                 {
@@ -61,7 +60,7 @@ namespace Shop.Domain.Services.Implementation
                 Password = userPassword
             });
 
-            return response;
+            return await response;
         }
 
         private string ToHash(string key)

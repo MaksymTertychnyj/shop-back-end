@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 using Shop.Data.Entities;
 using Shop.Domain.Dto;
@@ -20,14 +19,14 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize]
-        [HttpGet("/getUser")]
+        [HttpGet("login/getUser")]
         public User GetUser()
         {
             return HttpContext.Items["User"] as User;
         }
 
         [Authorize]
-        [HttpPost("/register")]
+        [HttpPost("login/register")]
         public async Task<IActionResult> Register([FromBody] User user)
         {
             var response = await loginService.Register(user);
@@ -40,15 +39,15 @@ namespace Shop.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPost("/authenticate")]
-        public IActionResult Authenticate([FromBody] UserAuthenticateRequest request)
+        [HttpPost("login/authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] UserAuthenticateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new { message = "You have not entered your username or password" });
             }
 
-            var response = loginService.Authenticate(request);
+            var response = await loginService.Authenticate(request);
 
             if (response == null)
             {

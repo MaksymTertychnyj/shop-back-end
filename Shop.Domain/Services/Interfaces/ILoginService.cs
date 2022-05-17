@@ -11,7 +11,7 @@ namespace Shop.Domain.Services.Interfaces
 {
     public interface ILoginService
     {
-        UserAuthenticateResponse Authenticate(UserAuthenticateRequest request);
+        Task<UserAuthenticateResponse> Authenticate(UserAuthenticateRequest request);
 
         Task<UserAuthenticateResponse> Register(User user);
     }
