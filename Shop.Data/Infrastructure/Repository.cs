@@ -31,9 +31,9 @@ namespace Shop.Data.Infrastructure
             context.Entry(entity).State = EntityState.Deleted;
         }
 
-        public ValueTask<TEntity?> GetByIdAsync(object key)
+        public async ValueTask<TEntity?> GetByIdAsync(object key)
         {
-            return dbEntities.FindAsync(key);
+            return await dbEntities.FindAsync(key);
         }
 
         public IQueryable<TEntity> Query(params Expression<Func<TEntity, object>>[] includes)
