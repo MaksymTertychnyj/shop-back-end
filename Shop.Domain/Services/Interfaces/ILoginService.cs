@@ -13,6 +13,6 @@ namespace Shop.Domain.Services.Interfaces
     {
         Task<UserAuthenticateResponse> Authenticate(UserAuthenticateRequest request);
 
-        Task<UserAuthenticateResponse> Register(User user);
+        Task<User> Register(User user);
     }
 }

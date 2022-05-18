@@ -28,7 +28,7 @@ namespace Shop.Domain.Services.Implementation
 
         public async Task<UserAuthenticateResponse> Authenticate(UserAuthenticateRequest request)
         {
-            User? user =await repository.GetByIdAsync(request.Login);
+            User? user = await repository.GetByIdAsync(request.Login);
 
             if (user != null)
             {
@@ -45,8 +45,13 @@ namespace Shop.Domain.Services.Implementation
         }
 
 
-        public async Task<UserAuthenticateResponse> Register(User user)
+        public async Task<User> Register(User user)
         {
+            User? checkedUser = await repository.GetByIdAsync(user.Login);
+
+            if (checkedUser != null)
+                return null!;
+
             string userPassword = user.Password;
             
             user.Password = ToHash(userPassword);
@@ -54,13 +59,9 @@ namespace Shop.Domain.Services.Implementation
             await repository.AddAsync(user);
             await repository.SaveChangesAsync();
 
-            var response = Authenticate(new UserAuthenticateRequest
-            {
-                Login = user.Login,
-                Password = userPassword
-            });
-
-            return await response;
+            user.Password = "";
+            
+            return user;
         }
 
         private string ToHash(string key)
