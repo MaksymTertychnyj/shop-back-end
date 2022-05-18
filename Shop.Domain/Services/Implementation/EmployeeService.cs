@@ -18,9 +18,15 @@ namespace Shop.Domain.Services.Implementation
             this.repository = repository;
         }
 
-        public Task<bool> DeleteEmployeeAsync(User employee)
+        public async Task DeleteEmployeeAsync(User employee)
         {
-            throw new NotImplementedException();
+            User? emp = await repository.GetByIdAsync(employee.Login);
+
+            if (emp != null)
+            {
+                repository.Delete(employee);
+                await repository.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<User>> GetAllEmployeesAsync()
@@ -40,7 +46,7 @@ namespace Shop.Domain.Services.Implementation
             return null!;
         }
 
-        public Task<bool> UpdateEmployeeAsync(User employee)
+        public Task UpdateEmployeeAsync(User employee)
         {
             throw new NotImplementedException();
         }

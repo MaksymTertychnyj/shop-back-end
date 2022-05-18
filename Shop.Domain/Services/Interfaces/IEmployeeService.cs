@@ -11,7 +11,7 @@ namespace Shop.Domain.Services.Interfaces
     {
         Task<IEnumerable<User>> GetAllEmployeesAsync();
         Task<User> GetEmployeeByLoginAsync(string login);
-        Task<bool> UpdateEmployeeAsync(User employee);
-        Task<bool> DeleteEmployeeAsync(User employee)
+        Task UpdateEmployeeAsync(User employee);
+        Task DeleteEmployeeAsync(User employee);
     }
 }
