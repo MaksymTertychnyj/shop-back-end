@@ -57,6 +57,7 @@ namespace Shop.Domain.Helpers
                 user!.Password = String.Empty;
                 
                 context.Items["User"] = user;
+                repository.Detach(user);
             }
             catch 
             {
