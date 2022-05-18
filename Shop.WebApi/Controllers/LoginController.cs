@@ -29,6 +29,11 @@ namespace Shop.WebApi.Controllers
         [HttpPost("login/register")]
         public async Task<IActionResult> Register([FromBody] User user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var response = await loginService.Register(user);
 
             if (response == null)
