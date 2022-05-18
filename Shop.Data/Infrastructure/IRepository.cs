@@ -12,6 +12,8 @@ namespace Shop.Data.Infrastructure
     {
         IQueryable<TEntity> Query(params Expression<Func<TEntity, object>>[] includes);
 
+        Task<IEnumerable<TEntity>> GetAllAsync();
+
         ValueTask<TEntity?> GetByIdAsync(object key);
 
         Task<TEntity> AddAsync(TEntity entity);

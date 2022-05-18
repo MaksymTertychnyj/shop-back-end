@@ -31,6 +31,11 @@ namespace Shop.Data.Infrastructure
             context.Entry(entity).State = EntityState.Deleted;
         }
 
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await dbEntities.ToListAsync();
+        }
+
         public async ValueTask<TEntity?> GetByIdAsync(object key)
         {
             return await dbEntities.FindAsync(key);
