@@ -28,6 +28,7 @@ builder.Services.AddDbContext<ShopContext>(options =>
 
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 var app = builder.Build();
 
