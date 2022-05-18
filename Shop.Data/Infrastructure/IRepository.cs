@@ -24,5 +24,7 @@ namespace Shop.Data.Infrastructure
 
         Task<int> SaveChangesAsync();
 
+        void Detach(TEntity entity);
+
     }
 }

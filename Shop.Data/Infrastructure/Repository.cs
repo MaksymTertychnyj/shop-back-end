@@ -59,5 +59,7 @@ namespace Shop.Data.Infrastructure
         {
             return await Task.Run(() => dbEntities.Update(entity).Entity);
         }
+
+        public void Detach(TEntity entity) => context.Entry(entity).State = EntityState.Detached;
     }
 }
