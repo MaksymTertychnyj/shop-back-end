@@ -21,5 +21,17 @@ namespace Shop.WebApi.Controllers
         {
             return await employeeService.GetAllEmployeesAsync();
         }
+
+        [Authorize]
+        [HttpDelete("employee/deleteEmployee/{loginEmployee}")]
+        public async Task DeleteEmployee(string loginEmployee)
+        {
+            User employee = await employeeService.GetEmployeeByLoginAsync(loginEmployee);
+
+            if (employee != null)
+            {
+                await employeeService.DeleteEmployeeAsync(employee);
+            }
+        }
     }
 }
