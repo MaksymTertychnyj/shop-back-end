@@ -33,5 +33,12 @@ namespace Shop.WebApi.Controllers
                 await employeeService.DeleteEmployeeAsync(employee);
             }
         }
+
+        [Authorize]
+        [HttpPut("employee/editEmployee")]
+        public async Task UpdateEmployee([FromBody] User employee)
+        {
+            await employeeService.UpdateEmployeeAsync(employee);
+        }
     }
 }
