@@ -12,16 +12,21 @@ namespace Shop.Data.Context
     public class ShopContext : DbContext
     {
         public DbSet<User>? Users { get; set; }
+        public DbSet<Department>? Departments { get; set; }
+        public DbSet<Category>? Categories { get; set; }
+        public DbSet<Product>? Products { get; set; }
 
         public ShopContext(DbContextOptions<ShopContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new DepartmentConfiguration());
+            builder.ApplyConfiguration(new CategoryConfiguration());
+            builder.ApplyConfiguration(new ProductConfiguration());
         }
     }
 }
