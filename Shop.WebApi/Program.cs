@@ -9,6 +9,7 @@ using Shop.Domain.Dto;
 using Shop.Domain.Helpers;
 using Shop.Domain.Services.Implementation;
 using Shop.Domain.Services.Interfaces;
+using Shop.WebApi.ServiceExtention;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,26 +19,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthorization();
-
 builder.Services.AddCors();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<ShopContext>(options => 
-            options.UseSqlServer(builder.Configuration
-            .GetConnectionString("DefaultConnection"))
-            );
-
-builder.Services.AddScoped<IRepository<User>, Repository<User>>();
-builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
-builder.Services.AddScoped<IRepository<Department>, Repository<Department>>();
-builder.Services.AddScoped<IRepository<Product>, Repository<Product>>();
-builder.Services.AddScoped<IEntityService<Category>, EntityService<Category>>();
-builder.Services.AddScoped<IEntityService<Department>, EntityService<Department>>();
-builder.Services.AddScoped<IEntityService<Product>, EntityService<Product>>();
-builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddDbInstaller(builder.Configuration);
+builder.Services.AddSwaggerInstaller();
 
 var app = builder.Build();
 
