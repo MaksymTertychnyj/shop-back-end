@@ -29,9 +29,13 @@ builder.Services.AddDbContext<ShopContext>(options =>
 
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
 builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
+builder.Services.AddScoped<IRepository<Department>, Repository<Department>>();
+builder.Services.AddScoped<IRepository<Product>, Repository<Product>>();
+builder.Services.AddScoped<IEntityService<Category>, EntityService<Category>>();
+builder.Services.AddScoped<IEntityService<Department>, EntityService<Department>>();
+builder.Services.AddScoped<IEntityService<Product>, EntityService<Product>>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<IEntityService<Category>, EntityService<Category>>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

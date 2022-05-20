@@ -13,13 +13,11 @@ namespace Shop.Domain.Services.Implementation
         where TEntity : class
     {
         private readonly IRepository<TEntity> repository;
-        private readonly IMapper mapper;
         
 
-        public EntityService(IRepository<TEntity> repository, IMapper mapper)
+        public EntityService(IRepository<TEntity> repository)
         {
             this.repository = repository;
-            this.mapper = mapper;
         }
 
         public async Task<TEntity> AddEntityAsync(TEntity entity)

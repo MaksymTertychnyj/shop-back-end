@@ -17,15 +17,15 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin, user")]
-        [HttpGet("getAllCategories")]
-        public async Task<IEnumerable<Category>> GetAllCategory()
+        [HttpGet("getAll")]
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
             return await categoryService.GetAllEntitiesAsync();
         }
 
         [Authorize(Roles = "admin, user")]
-        [HttpGet("getCategory/{key}")]
-        public async Task<IActionResult> GetCategory([FromQuery] int key)
+        [HttpGet("getById")]
+        public async Task<IActionResult> GetCategoryAsync([FromQuery] int key)
         {
             var category = await categoryService.GetEntityByKeyAsync(key);
 
@@ -36,7 +36,7 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPost("addCategory")]
+        [HttpPost("add")]
         public async Task<IActionResult> AddCategoryAsync([FromBody] Category categoty)
         {
             if (ModelState.IsValid)
@@ -54,10 +54,10 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete("deleteCategory/{key}")]
-        public async Task<IActionResult> DeleteCategory([FromQuery] string key)
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteCategoryAsync([FromQuery] int key)
         {
-            Category categoryObj = await categoryService.GetEntityByKeyAsync(int.Parse(key));
+            Category categoryObj = await categoryService.GetEntityByKeyAsync(key);
 
             if (categoryObj != null)
             {
@@ -69,8 +69,8 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPut("updateCategory")]
-        public async Task<IActionResult> UpdateCategory([FromBody] Category category)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateCategoryAsync([FromBody] Category category)
         {
             if (ModelState.IsValid)
             {
