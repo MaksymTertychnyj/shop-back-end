@@ -9,6 +9,7 @@ using Shop.Domain.Services.Interfaces;
 namespace Shop.WebApi.Controllers
 {
     [ApiController]
+    [Route("login/")]
     public class LoginController : ControllerBase
     {
         private readonly ILoginService loginService;
@@ -19,14 +20,14 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize]
-        [HttpGet("login/getUser")]
+        [HttpGet("getUser")]
         public User GetUser()
         {
             return HttpContext.Items["User"] as User;
         }
 
-        [Authorize]
-        [HttpPost("login/register")]
+        [Authorize(Roles = "admin")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User user)
         {
             if (!ModelState.IsValid)
@@ -44,7 +45,7 @@ namespace Shop.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPost("login/authenticate")]
+        [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] UserAuthenticateRequest request)
         {
             if (!ModelState.IsValid)

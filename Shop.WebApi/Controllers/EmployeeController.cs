@@ -6,6 +6,7 @@ using Shop.Domain.Services.Interfaces;
 namespace Shop.WebApi.Controllers
 {
     [ApiController]
+    [Route("employee/")]
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeService employeeService;
@@ -15,15 +16,15 @@ namespace Shop.WebApi.Controllers
             this.employeeService = service;
         }
 
-        [Authorize]
-        [HttpGet("employee/getAllEmployees")]
+        [Authorize(Roles = "admin")]
+        [HttpGet("getAllEmployees")]
         public async Task<IEnumerable<User>> GetAllEmployeesAsync()
         {
             return await employeeService.GetAllEmployeesAsync();
         }
 
-        [Authorize]
-        [HttpDelete("employee/deleteEmployee/{loginEmployee}")]
+        [Authorize(Roles = "admin")]
+        [HttpDelete("deleteEmployee/{loginEmployee}")]
         public async Task DeleteEmployee(string loginEmployee)
         {
             User employee = await employeeService.GetEmployeeByLoginAsync(loginEmployee);
@@ -34,8 +35,8 @@ namespace Shop.WebApi.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPut("employee/editEmployee")]
+        [Authorize(Roles = "admin")]
+        [HttpPut("editEmployee")]
         public async Task UpdateEmployee([FromBody] User employee)
         {
             await employeeService.UpdateEmployeeAsync(employee);
