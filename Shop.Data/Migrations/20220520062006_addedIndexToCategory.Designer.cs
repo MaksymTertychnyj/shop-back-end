@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop.Data.Context;
 
@@ -10,9 +11,10 @@ using Shop.Data.Context;
 namespace Shop.Data.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class ShopContextModelSnapshot : ModelSnapshot
+    [Migration("20220520062006_addedIndexToCategory")]
+    partial class addedIndexToCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,14 +61,11 @@ namespace Shop.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Departments", (string)null);
@@ -85,7 +84,7 @@ namespace Shop.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -98,9 +97,6 @@ namespace Shop.Data.Migrations
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Products", (string)null);

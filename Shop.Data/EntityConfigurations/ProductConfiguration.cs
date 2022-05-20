@@ -16,9 +16,11 @@ namespace Shop.Data.EntityConfigurations
             builder.ToTable("Products");
             builder.HasKey(product => product.Id);
             builder.HasIndex(product => product.Id).IsUnique(true);
+            builder.HasIndex(p => p.Name).IsUnique(true);
             builder.HasOne(product => product.Category)
                 .WithMany(category => category.Products)
                 .HasForeignKey(product => product.CategoryId);
+            builder.Property(p => p.Id).UseIdentityColumn();
         }
     }
 }

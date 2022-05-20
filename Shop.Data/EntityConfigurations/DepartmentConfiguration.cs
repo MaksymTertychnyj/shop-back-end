@@ -16,6 +16,8 @@ namespace Shop.Data.EntityConfigurations
             builder.ToTable("Departments");
             builder.HasKey(department => department.Id);
             builder.HasIndex(department => department.Id).IsUnique(true);
+            builder.HasIndex(department => department.Name).IsUnique(true);
+            builder.Property(d => d.Id).UseIdentityColumn();
         }
     }
 }
