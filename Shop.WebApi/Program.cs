@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Shop.Data.Context;
 using Shop.Data.Entities;
 using Shop.Data.Infrastructure;
+using Shop.Domain.Dto;
 using Shop.Domain.Helpers;
 using Shop.Domain.Services.Implementation;
 using Shop.Domain.Services.Interfaces;
@@ -27,8 +28,12 @@ builder.Services.AddDbContext<ShopContext>(options =>
             );
 
 builder.Services.AddScoped<IRepository<User>, Repository<User>>();
+builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IEntityService<Category>, EntityService<Category>>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
@@ -52,6 +57,9 @@ app.UseCors(x => x
     .AllowAnyHeader());
 
 app.UseMiddleware<JwtMiddleware>();
-app.UseEndpoints(endpoints => endpoints.MapControllers());
+app.UseEndpoints(endpoints => endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller}/action/{key?}"
+    ));
 
 app.Run();
