@@ -81,7 +81,7 @@ namespace Shop.WebApi.Controllers
                 return Ok();
             }
 
-            return BadRequest(new {message = "the department is not found"});
+            return NotFound();
         }
     }
 }

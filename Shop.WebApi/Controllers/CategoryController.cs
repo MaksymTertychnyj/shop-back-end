@@ -65,7 +65,7 @@ namespace Shop.WebApi.Controllers
                 return Ok();
             }
 
-            return BadRequest(new { message = "the category is not found" });
+            return NotFound();
         }
 
         [Authorize(Roles = "admin")]
