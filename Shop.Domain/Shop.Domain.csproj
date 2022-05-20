@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Shop.Data\Shop.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mapping\" />
+  </ItemGroup>
+
 </Project>
