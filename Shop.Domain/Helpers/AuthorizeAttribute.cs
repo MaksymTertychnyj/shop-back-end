@@ -13,14 +13,32 @@ namespace Shop.Domain.Helpers
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
+        public string? Roles { get; set; }
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = (User?)context.HttpContext.Items["User"];
+            var user = (User?)context.HttpContext.Items["User"];        
 
             if (user == null)
             {
                 context.Result = new JsonResult(new {message = "UnAuthorized"})
                 { StatusCode = StatusCodes.Status401Unauthorized };
+            }
+            else
+            {
+                if (Roles != null)
+                {
+                    var roles = Roles.Split(", ");
+
+                    if (Array.Exists(roles, role => role == user.Role))
+                    {
+                    }
+                    else
+                    {
+                        context.Result = new JsonResult(new { message = "doesn't get access with this role" })
+                        { StatusCode = StatusCodes.Status403Forbidden };
+                    }
+                }
             }
         }
     }
