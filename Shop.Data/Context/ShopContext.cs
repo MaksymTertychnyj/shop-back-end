@@ -15,6 +15,7 @@ namespace Shop.Data.Context
         public DbSet<Department>? Departments { get; set; }
         public DbSet<Category>? Categories { get; set; }
         public DbSet<Product>? Products { get; set; }
+        public DbSet<Image>? Images { get; set; }
 
         public ShopContext(DbContextOptions<ShopContext> options)
             : base(options)
@@ -27,6 +28,7 @@ namespace Shop.Data.Context
             builder.ApplyConfiguration(new DepartmentConfiguration());
             builder.ApplyConfiguration(new CategoryConfiguration());
             builder.ApplyConfiguration(new ProductConfiguration());
+            builder.ApplyConfiguration(new ImageConfiguration());
         }
     }
 }
