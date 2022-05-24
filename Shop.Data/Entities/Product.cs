@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Shop.Data.Enums;
 
 namespace Shop.Data.Entities
 {
@@ -11,7 +12,8 @@ namespace Shop.Data.Entities
     {
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = String.Empty;
+        public virtual int TargetType { get; set; } = (int)Enums.TargetType.Product;
         public int Quantity { get; set; }
         public double Price { get; set; }
         [Required]
