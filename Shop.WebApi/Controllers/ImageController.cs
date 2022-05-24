@@ -46,7 +46,7 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin, user")]
-        [HttpDelete("delete/{targetId}/targetType")]
+        [HttpDelete("delete/{targetId}/{targetType}")]
         public async Task<IActionResult> DeleteImageAsync(int targetId, int targetType)
         {
             var result = await imageService.DeleteImageAsync(targetId, targetType);
