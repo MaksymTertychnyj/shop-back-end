@@ -36,20 +36,16 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpPost("add")]
-        public async Task<IActionResult> AddDepartmentAsync([FromBody] Department department)
+        [HttpPost("add/{name}")]
+        public async Task<IActionResult> AddDepartmentAsync([FromRoute] string name)
         {
-            if (ModelState.IsValid)
-            {
-                var departmentObg = await departmentService.AddEntityAsync(department);
 
-                if (departmentObg != null)
-                    return Ok(department);
+                var departmentObj = await departmentService.AddEntityAsync(new Department { Name = name});
+
+                if (departmentObj != null)
+                    return Ok(departmentObj);
 
                 return BadRequest(new {message = "adding department has been failed"});
-            }
-
-            return BadRequest(new {message = "the department doesn't match to entity"});
         }
 
         [Authorize(Roles = "admin")]

@@ -48,15 +48,19 @@ namespace Shop.WebApi.Controllers
 
 
         [Authorize(Roles = "admin")]
-        [HttpPost("add")]
-        public async Task<IActionResult> AddCategoryAsync([FromBody] Category categoty)
+        [HttpPost("add/{name}/{departmentId}")]
+        public async Task<IActionResult> AddCategoryAsync([FromRoute] string name, int departmentId)
         {
             if (ModelState.IsValid)
             {
-                var categoryObj = await categoryService.AddEntityAsync(categoty);
+                var categoryObj = await categoryService
+                    .AddEntityAsync(new Category { 
+                        Name = name, 
+                        DepartmentId = departmentId
+                    });
 
                 if (categoryObj != null)
-                    return Ok(categoty);
+                    return Ok(categoryObj);
                     
 
                 return BadRequest(new { message = "adding category has been failed" });
