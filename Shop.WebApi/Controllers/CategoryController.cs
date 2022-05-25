@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop.Data.Entities;
+using Shop.Data.Infrastructure;
 using Shop.Domain.Helpers;
 using Shop.Domain.Services.Interfaces;
 
@@ -10,10 +11,12 @@ namespace Shop.WebApi.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IEntityService<Category> categoryService;
+        private readonly IRepository<Category> categoryRepository;
 
-        public CategoryController(IEntityService<Category> entityService)
+        public CategoryController(IEntityService<Category> entityService, IRepository<Category> categoryRepository)
         {
             categoryService = entityService;
+            this.categoryRepository = categoryRepository;
         }
 
         [Authorize(Roles = "admin, user")]
@@ -24,8 +27,16 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin, user")]
-        [HttpGet("getById")]
-        public async Task<IActionResult> GetCategoryAsync([FromQuery] int key)
+        [HttpGet("getByDepartment/{departmentId}")]
+        public async Task<IEnumerable<Category>> GetCategoriesByDepartment([FromRoute] int departmentId)
+        {
+            return await Task.Run(() => categoryRepository.Query().Where(c => c.DepartmentId == departmentId));
+        }
+
+
+        [Authorize(Roles = "admin, user")]
+        [HttpGet("getById/{key}")]
+        public async Task<IActionResult> GetCategoryAsync([FromRoute] int key)
         {
             var category = await categoryService.GetEntityByKeyAsync(key);
 
@@ -34,6 +45,7 @@ namespace Shop.WebApi.Controllers
 
             return NotFound();
         }
+
 
         [Authorize(Roles = "admin")]
         [HttpPost("add")]
@@ -54,8 +66,8 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteCategoryAsync([FromQuery] int key)
+        [HttpDelete("delete/{key}")]
+        public async Task<IActionResult> DeleteCategoryAsync([FromRoute] int key)
         {
             Category categoryObj = await categoryService.GetEntityByKeyAsync(key);
 
@@ -78,7 +90,7 @@ namespace Shop.WebApi.Controllers
 
                 if (result != null)
                 {
-                    return Ok();
+                    return Ok(result);
                 }
 
                 return BadRequest(new { message = "updating the category has been failed" });

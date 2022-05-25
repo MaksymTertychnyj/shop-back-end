@@ -24,8 +24,8 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin, user")]
-        [HttpGet("getById")]
-        public async Task<IActionResult> GetDepartmentAsync([FromQuery] int id)
+        [HttpGet("getById/{id}")]
+        public async Task<IActionResult> GetDepartmentAsync([FromRoute] int id)
         {
             var department = await departmentService.GetEntityByKeyAsync(id);
 
@@ -70,8 +70,8 @@ namespace Shop.WebApi.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteDepartmentAsync([FromQuery] int id)
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteDepartmentAsync([FromRoute] int id)
         {
             var departmentObj = await departmentService.GetEntityByKeyAsync(id);
 
