@@ -11,7 +11,6 @@ namespace Shop.Data.Entities
     public class Department
     {
         public int Id { get; set; }
-        [Required]
         public string Name { get; set; } = String.Empty;
         public virtual int TargetType { get; set; } = (int)Enums.TargetType.Department;
         public ICollection<Category> Categories { get; set; } = new List<Category>();

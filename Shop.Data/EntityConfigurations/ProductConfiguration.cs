@@ -19,7 +19,10 @@ namespace Shop.Data.EntityConfigurations
             builder.HasIndex(p => p.Name).IsUnique(true);
             builder.HasOne(product => product.Category)
                 .WithMany(category => category.Products)
-                .HasForeignKey(product => product.CategoryId);
+                .HasForeignKey(product => product.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(p => p.Name).IsRequired(true);
+            builder.Property(p => p.CategoryId).IsRequired(true);
             builder.Property(p => p.Id).UseIdentityColumn();
         }
     }

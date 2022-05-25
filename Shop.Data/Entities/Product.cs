@@ -11,12 +11,10 @@ namespace Shop.Data.Entities
     public class Product
     {
         public int Id { get; set; }
-        [Required]
         public string Name { get; set; } = String.Empty;
         public virtual int TargetType { get; set; } = (int)Enums.TargetType.Product;
         public int Quantity { get; set; }
         public double Price { get; set; }
-        [Required]
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
     }
