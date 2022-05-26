@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop.Data.Entities;
+using Shop.Data.Infrastructure;
 using Shop.Domain.Helpers;
 using Shop.Domain.Services.Interfaces;
 
@@ -10,10 +11,12 @@ namespace Shop.WebApi.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IEntityService<Product> productService;
+        private readonly IRepository<Product> productRepository;
 
-        public ProductController(IEntityService<Product> productService)
+        public ProductController(IEntityService<Product> productService, IRepository<Product> productRepository)
         {
             this.productService = productService;
+            this.productRepository = productRepository;
         }
 
         [Authorize(Roles = "admin, user")]
@@ -33,6 +36,18 @@ namespace Shop.WebApi.Controllers
                 return NotFound();
 
             return Ok(productObj);
+        }
+
+        [Authorize(Roles = "admin, user")]
+        [HttpGet("getByCategory/{categoryId}")]
+        public async Task<IActionResult> GetProductByCategoryAsync([FromRoute] int categoryId)
+        {
+            var products = await Task.Run(() => productRepository.Query().Where(p => p.CategoryId == categoryId));
+
+            if (products != null)
+                return Ok(products);
+
+            return NotFound();
         }
 
         [Authorize(Roles = "admin, user")]
