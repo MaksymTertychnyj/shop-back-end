@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Shop.Data.Entities;
 using Shop.Data.Infrastructure;
 using Shop.Domain.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +20,12 @@ namespace Shop.Domain.Services.Implementation
         public EntityService(IRepository<TEntity> repository)
         {
             this.repository = repository;
+        }
+
+        public async Task<IEnumerable<TEntity>> GetEntitiesByPropertyAsync(Expression<Func<TEntity, bool>> predicat)
+        {
+            var result = await Task.Run(() => repository.Query().Where(predicat.Compile()));
+            return result;
         }
 
         public async Task<TEntity> AddEntityAsync(TEntity entity)
