@@ -11,12 +11,10 @@ namespace Shop.WebApi.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IEntityService<Category> categoryService;
-        private readonly IRepository<Category> categoryRepository;
 
-        public CategoryController(IEntityService<Category> entityService, IRepository<Category> categoryRepository)
+        public CategoryController(IEntityService<Category> entityService)
         {
             categoryService = entityService;
-            this.categoryRepository = categoryRepository;
         }
 
         [Authorize(Roles = "admin, user")]
@@ -30,7 +28,7 @@ namespace Shop.WebApi.Controllers
         [HttpGet("getByDepartment/{departmentId}")]
         public async Task<IEnumerable<Category>> GetCategoriesByDepartment([FromRoute] int departmentId)
         {
-            return await Task.Run(() => categoryRepository.Query().Where(c => c.DepartmentId == departmentId));
+            return await Task.Run(() => categoryService.GetEntitiesByPropertyAsync(c => c.DepartmentId == departmentId));
         }
 
 
