@@ -16,14 +16,12 @@ namespace Shop.WebApi.Controllers
             this.departmentService = departmentService;
         }
 
-        [Authorize(Roles = "admin, user")]
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAllDepartmentsAsync()
         {
             return Ok(await departmentService.GetAllEntitiesAsync());
         }
 
-        [Authorize(Roles = "admin, user")]
         [HttpGet("getById/{id}")]
         public async Task<IActionResult> GetDepartmentAsync([FromRoute] int id)
         {

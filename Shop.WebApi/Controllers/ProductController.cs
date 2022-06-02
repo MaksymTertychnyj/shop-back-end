@@ -17,14 +17,12 @@ namespace Shop.WebApi.Controllers
             this.productService = productService;
         }
 
-        [Authorize(Roles = "admin, user")]
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAllProductsAsync()
         {
             return Ok(await productService.GetAllEntitiesAsync());
         }
 
-        [Authorize(Roles = "admin, user")]
         [HttpGet("getById/{id}")]
         public async Task<IActionResult> GetProductAsync([FromRoute] int id)
         {
@@ -36,7 +34,6 @@ namespace Shop.WebApi.Controllers
             return Ok(productObj);
         }
 
-        [Authorize(Roles = "admin, user")]
         [HttpGet("getByCategory/{categoryId}")]
         public async Task<IActionResult> GetProductByCategoryAsync([FromRoute] int categoryId)
         {

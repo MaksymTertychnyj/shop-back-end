@@ -17,14 +17,12 @@ namespace Shop.WebApi.Controllers
             categoryService = entityService;
         }
 
-        [Authorize(Roles = "admin, user")]
         [HttpGet("getAll")]
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
             return await categoryService.GetAllEntitiesAsync();
         }
 
-        [Authorize(Roles = "admin, user")]
         [HttpGet("getByDepartment/{departmentId}")]
         public async Task<IEnumerable<Category>> GetCategoriesByDepartment([FromRoute] int departmentId)
         {

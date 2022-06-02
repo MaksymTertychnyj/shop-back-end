@@ -16,7 +16,6 @@ namespace Shop.WebApi.Controllers
             this.imageService = imageService;
         }
 
-        [Authorize(Roles = "admin, user")]
         [HttpGet("getByParams/{targetId}/{targetType}")]
         public async Task<IActionResult> GetImageAsync(int targetId, int targetType)
         {
