@@ -11,7 +11,7 @@ namespace Shop.Data.Entities
     public class Product
     {
         public int Id { get; set; }
-        public string Name { get; set; } = String.Empty;
+        public string JsonParameters { get; set; } = String.Empty;
         public virtual int TargetType { get; set; } = (int)Enums.TargetType.Product;
         public int Quantity { get; set; }
         public double Price { get; set; }
