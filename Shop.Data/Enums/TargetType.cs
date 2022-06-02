@@ -11,6 +11,6 @@ namespace Shop.Data.Enums
         Department,
         Category,
         Product,
-        User
+        Customer
     }
 }
