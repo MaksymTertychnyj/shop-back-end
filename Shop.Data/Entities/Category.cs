@@ -15,6 +15,7 @@ namespace Shop.Data.Entities
         public virtual int TargetType { get; set; } = (int)Enums.TargetType.Category;
         public int DepartmentId { get; set; }
         public Department? Department { get; set; }
+        public JsonModel? JsonModel { get; set; }
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }
