@@ -23,11 +23,13 @@ namespace Shop.WebApi.ServiceExtention
             Services.AddScoped<IRepository<Product>, Repository<Product>>();
             Services.AddScoped<IRepository<Image>, Repository<Image>>();
             Services.AddScoped<IRepository<JsonModel>, Repository<JsonModel>>();
+            Services.AddScoped<IRepository<Customer>, Repository<Customer>>();
             Services.AddScoped<IEntityService<Category>, EntityService<Category>>();
             Services.AddScoped<IEntityService<Department>, EntityService<Department>>();
             Services.AddScoped<IEntityService<Product>, EntityService<Product>>();
             Services.AddScoped<IEntityService<JsonModel>, EntityService<JsonModel>>();
             Services.AddScoped<ILoginService<User, UserAuthenticateResponse>, LoginUserService>();
+            Services.AddScoped<ILoginService<Customer, Domain.Dto.User.CustomerAuthenticateResponse>, LoginCustomerService>();
             Services.AddScoped<IEmployeeService, EmployeeService>();
             Services.AddScoped<IImageService, ImageService>();
             
