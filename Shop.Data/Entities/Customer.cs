@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shop.Data.Entities.Orders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,6 @@ namespace Shop.Data.Entities
         public string Address { get; set; } = string.Empty;
         public string Login { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

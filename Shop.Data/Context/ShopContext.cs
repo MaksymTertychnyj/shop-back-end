@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop.Data.Entities;
+using Shop.Data.Entities.Orders;
 using Shop.Data.EntityConfigurations;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,9 @@ namespace Shop.Data.Context
         public DbSet<Image>? Images { get; set; }
         public DbSet<JsonModel>? JsonModels { get; set; }
         public DbSet<Customer>? Customers { get; set; }
+        public DbSet<Order>? Orders { get; set; }
+        public DbSet<OrderAddress>? OrderAddresses { get; set; }
+        public DbSet<OrderProduct>? OrderProducts { get; set; }
 
         public ShopContext(DbContextOptions<ShopContext> options)
             : base(options)
