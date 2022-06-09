@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop.Data.Context;
 using Shop.Data.Entities;
+using Shop.Data.Entities.Orders;
 using Shop.Data.Infrastructure;
 using Shop.Domain.Dto;
 using Shop.Domain.Services.Implementation;
@@ -24,10 +25,16 @@ namespace Shop.WebApi.ServiceExtention
             Services.AddScoped<IRepository<Image>, Repository<Image>>();
             Services.AddScoped<IRepository<JsonModel>, Repository<JsonModel>>();
             Services.AddScoped<IRepository<Customer>, Repository<Customer>>();
+            Services.AddScoped<IRepository<Order>, Repository<Order>>();
+            Services.AddScoped<IRepository<OrderProduct>, Repository<OrderProduct>>();
+            Services.AddScoped<IRepository<OrderAddress>, Repository<OrderAddress>>();
             Services.AddScoped<IEntityService<Category>, EntityService<Category>>();
             Services.AddScoped<IEntityService<Department>, EntityService<Department>>();
             Services.AddScoped<IEntityService<Product>, EntityService<Product>>();
             Services.AddScoped<IEntityService<JsonModel>, EntityService<JsonModel>>();
+            Services.AddScoped<IEntityService<Order>, EntityService<Order>>();
+            Services.AddScoped<IEntityService<OrderProduct>, EntityService<OrderProduct>>();
+            Services.AddScoped<IEntityService<OrderAddress>, EntityService<OrderAddress>>();
             Services.AddScoped<ILoginService<User, UserAuthenticateResponse>, LoginUserService>();
             Services.AddScoped<ILoginService<Customer, Domain.Dto.User.CustomerAuthenticateResponse>, LoginCustomerService>();
             Services.AddScoped<IEmployeeService, EmployeeService>();
