@@ -26,6 +26,11 @@ namespace Shop.Data.Infrastructure
             return (await dbEntities.AddAsync(entity)).Entity;
         }
 
+        public async Task AddEntitiesAsync(TEntity[] entities)
+        {
+            await dbEntities.AddRangeAsync(entities);
+        }
+
         public void Delete(TEntity entity)
         {
             context.Entry(entity).State = EntityState.Deleted;

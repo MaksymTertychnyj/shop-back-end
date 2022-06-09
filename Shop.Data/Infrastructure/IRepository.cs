@@ -18,6 +18,8 @@ namespace Shop.Data.Infrastructure
 
         Task<TEntity> AddAsync(TEntity entity);
 
+        Task AddEntitiesAsync(TEntity[] entities);
+
         Task<TEntity> UpdateAsync(TEntity entity);
 
         void Delete(TEntity entity);
