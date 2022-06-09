@@ -17,6 +17,7 @@ namespace Shop.Data.Context
         public DbSet<Product>? Products { get; set; }
         public DbSet<Image>? Images { get; set; }
         public DbSet<JsonModel>? JsonModels { get; set; }
+        public DbSet<Customer>? Customers { get; set; }
 
         public ShopContext(DbContextOptions<ShopContext> options)
             : base(options)
@@ -31,6 +32,7 @@ namespace Shop.Data.Context
             builder.ApplyConfiguration(new ProductConfiguration());
             builder.ApplyConfiguration(new ImageConfiguration());
             builder.ApplyConfiguration(new JsonModelConfiguration());
+            builder.ApplyConfiguration(new CustomerConfiguration());
         }
     }
 }
