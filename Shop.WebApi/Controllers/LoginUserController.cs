@@ -9,12 +9,12 @@ using Shop.Domain.Services.Interfaces;
 namespace Shop.WebApi.Controllers
 {
     [ApiController]
-    [Route("login/")]
-    public class LoginController : ControllerBase
+    [Route("loginEmployee/")]
+    public class LoginUserController : ControllerBase
     {
         private readonly ILoginService<User, UserAuthenticateResponse> loginService;
 
-        public LoginController(ILoginService<User, UserAuthenticateResponse> loginService)
+        public LoginUserController(ILoginService<User, UserAuthenticateResponse> loginService)
         {
                this.loginService = loginService;
         }
