@@ -12,18 +12,11 @@ namespace Shop.WebApi.Controllers
     [Route("login/")]
     public class LoginController : ControllerBase
     {
-        private readonly ILoginService loginService;
+        private readonly ILoginService<User, UserAuthenticateResponse> loginService;
 
-        public LoginController(ILoginService loginService)
+        public LoginController(ILoginService<User, UserAuthenticateResponse> loginService)
         {
                this.loginService = loginService;
-        }
-
-        [Authorize]
-        [HttpGet("getUser")]
-        public User GetUser()
-        {
-            return HttpContext.Items["User"] as User;
         }
 
         [Authorize(Roles = "admin")]
@@ -46,7 +39,7 @@ namespace Shop.WebApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] UserAuthenticateRequest request)
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request)
         {
             if (!ModelState.IsValid)
             {

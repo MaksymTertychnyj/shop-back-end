@@ -15,18 +15,18 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Shop.Domain.Services.Implementation
 {
-    public class LoginService : ILoginService
+    public class LoginUserService : ILoginService<User, UserAuthenticateResponse>
     {
         private readonly IRepository<User> repository;
         private readonly IConfiguration configuration;
 
-        public LoginService(IRepository<User> repository, IConfiguration configuration)
+        public LoginUserService(IRepository<User> repository, IConfiguration configuration)
         {
             this.repository = repository;
             this.configuration = configuration;
         }
 
-        public async Task<UserAuthenticateResponse> Authenticate(UserAuthenticateRequest request)
+        public async Task<UserAuthenticateResponse> Authenticate(AuthenticateRequest request)
         {
             User? user = await repository.GetByIdAsync(request.Login);
 

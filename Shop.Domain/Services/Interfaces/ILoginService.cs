@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 
 namespace Shop.Domain.Services.Interfaces
 {
-    public interface ILoginService
-    {
-        Task<UserAuthenticateResponse> Authenticate(UserAuthenticateRequest request);
+    public interface ILoginService<T, R>
+        where T : class 
+        where R : class
 
-        Task<User> Register(User user);
+    {
+        Task<R> Authenticate(AuthenticateRequest request);
+
+        Task<T> Register(T user);
     }
 }

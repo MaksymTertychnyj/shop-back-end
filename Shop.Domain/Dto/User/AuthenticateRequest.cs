@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Domain.Dto
 {
-    public class UserAuthenticateRequest
+    public class AuthenticateRequest
     {
         [Required]
         public string Login { get; set; } = string.Empty;

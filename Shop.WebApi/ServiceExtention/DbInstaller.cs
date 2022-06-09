@@ -2,6 +2,7 @@
 using Shop.Data.Context;
 using Shop.Data.Entities;
 using Shop.Data.Infrastructure;
+using Shop.Domain.Dto;
 using Shop.Domain.Services.Implementation;
 using Shop.Domain.Services.Interfaces;
 
@@ -26,7 +27,7 @@ namespace Shop.WebApi.ServiceExtention
             Services.AddScoped<IEntityService<Department>, EntityService<Department>>();
             Services.AddScoped<IEntityService<Product>, EntityService<Product>>();
             Services.AddScoped<IEntityService<JsonModel>, EntityService<JsonModel>>();
-            Services.AddScoped<ILoginService, LoginService>();
+            Services.AddScoped<ILoginService<User, UserAuthenticateResponse>, LoginUserService>();
             Services.AddScoped<IEmployeeService, EmployeeService>();
             Services.AddScoped<IImageService, ImageService>();
             
