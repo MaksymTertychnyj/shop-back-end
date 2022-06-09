@@ -13,14 +13,14 @@ namespace Shop.Domain.Helpers
 {
     public static class LoginHelper
     {
-        public static string GenerateJwtToken(this IConfiguration configuration, User user)
+        public static string GenerateJwtToken(this IConfiguration configuration, string login)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"]);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("Login", user.Login)}),
+                Subject = new ClaimsIdentity(new[] { new Claim("Login", login)}),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

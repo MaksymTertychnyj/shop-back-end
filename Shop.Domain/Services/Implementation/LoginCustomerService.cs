@@ -1,67 +1,65 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Configuration;
 using Shop.Data.Entities;
 using Shop.Data.Infrastructure;
 using Shop.Domain.Dto;
-using Shop.Domain.Services.Interfaces;
+using Shop.Domain.Dto.User;
 using Shop.Domain.Helpers;
+using Shop.Domain.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Shop.Domain.Services.Implementation
 {
-    public class LoginUserService : ILoginService<User, UserAuthenticateResponse>
+    public class LoginCustomerService : ILoginService<Customer, CustomerAuthenticateResponse>
     {
-        private readonly IRepository<User> repository;
+        private readonly IRepository<Customer> repository;
         private readonly IConfiguration configuration;
 
-        public LoginUserService(IRepository<User> repository, IConfiguration configuration)
+        public LoginCustomerService(IRepository<Customer> repository, IConfiguration configuration)
         {
             this.repository = repository;
             this.configuration = configuration;
         }
 
-        public async Task<UserAuthenticateResponse> Authenticate(AuthenticateRequest request)
+        public async Task<CustomerAuthenticateResponse> Authenticate(AuthenticateRequest request)
         {
-            User? user = await repository.GetByIdAsync(request.Login);
+            Customer? customer = await repository.GetByIdAsync(request.Login);
 
-            if (user != null)
+            if (customer != null)
             {
                 string decryptedPassword = ToHash(request.Password);
 
-                if (user.Password == decryptedPassword)
+                if (customer.Password == decryptedPassword)
                 {
-                    var token = configuration.GenerateJwtToken(user.Login);
-                    return new UserAuthenticateResponse(user, token);
+                    var token = configuration.GenerateJwtToken(customer.Login);
+                    return new CustomerAuthenticateResponse(customer, token);
                 }
             }
 
             return null!;
         }
 
-
-        public async Task<User> Register(User user)
+        public async Task<Customer> Register(Customer customer)
         {
-            User? checkedUser = await repository.GetByIdAsync(user.Login);
+            Customer? checkedUser = await repository.GetByIdAsync(customer.Login);
 
             if (checkedUser != null)
                 return null!;
 
-            string userPassword = user.Password;
-            
-            user.Password = ToHash(userPassword);
+            string customerPassword = customer.Password;
 
-            await repository.AddAsync(user);
+            customer.Password = ToHash(customerPassword);
+
+            await repository.AddAsync(customer);
             await repository.SaveChangesAsync();
 
-            user.Password = "";
-            
-            return user;
+            customer.Password = "";
+
+            return customer;
         }
 
         private string ToHash(string key)
