@@ -23,9 +23,6 @@ namespace Shop.Data.EntityConfigurations.Orders
                 .WithMany(c => c.Orders)
                 .HasForeignKey(o => o.CustomerLogin)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(o => o.OrderAddress)
-                .WithOne(a => a.Order)
-                .HasForeignKey<Order>(o => o.OrderAddressId);
         }
     }
 }

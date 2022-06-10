@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop.Data.Context;
 
@@ -11,9 +12,10 @@ using Shop.Data.Context;
 namespace Shop.Data.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class ShopContextModelSnapshot : ModelSnapshot
+    [Migration("20220610090147_add_deleteBehavior_OrderConfig")]
+    partial class add_deleteBehavior_OrderConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,12 +184,18 @@ namespace Shop.Data.Migrations
                     b.Property<DateTime>("DateRegister")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("OrderAddressId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerLogin");
+
+                    b.HasIndex("OrderAddressId")
+                        .IsUnique();
 
                     b.ToTable("Orders");
                 });
@@ -208,9 +216,6 @@ namespace Shop.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Place")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -220,9 +225,6 @@ namespace Shop.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
 
                     b.ToTable("OrderAddresses");
                 });
@@ -360,18 +362,15 @@ namespace Shop.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("Shop.Data.Entities.Orders.OrderAddress", b =>
-                {
-                    b.HasOne("Shop.Data.Entities.Orders.Order", "Order")
-                        .WithOne("OrderAddress")
-                        .HasForeignKey("Shop.Data.Entities.Orders.OrderAddress", "OrderId")
+                    b.HasOne("Shop.Data.Entities.Orders.OrderAddress", "OrderAddress")
+                        .WithOne("Order")
+                        .HasForeignKey("Shop.Data.Entities.Orders.Order", "OrderAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Order");
+                    b.Navigation("Customer");
+
+                    b.Navigation("OrderAddress");
                 });
 
             modelBuilder.Entity("Shop.Data.Entities.Orders.OrderProduct", b =>
@@ -416,9 +415,12 @@ namespace Shop.Data.Migrations
 
             modelBuilder.Entity("Shop.Data.Entities.Orders.Order", b =>
                 {
-                    b.Navigation("OrderAddress");
-
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Shop.Data.Entities.Orders.OrderAddress", b =>
+                {
+                    b.Navigation("Order");
                 });
 #pragma warning restore 612, 618
         }

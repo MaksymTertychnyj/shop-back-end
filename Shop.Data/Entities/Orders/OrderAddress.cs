@@ -13,6 +13,7 @@ namespace Shop.Data.Entities.Orders
         public string Region { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string Place { get; set; } = string.Empty;
+        public int OrderId { get; set; }
         public Order? Order { get; set; }
     }
 }

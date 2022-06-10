@@ -21,6 +21,10 @@ namespace Shop.Data.EntityConfigurations.Orders
             builder.Property(o => o.Region).IsRequired();
             builder.Property(o => o.City).IsRequired();
             builder.Property(o => o.Place).IsRequired();
+            builder.HasOne(a => a.Order)
+                .WithOne(o => o.OrderAddress)
+                .HasForeignKey<OrderAddress>(a => a.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
