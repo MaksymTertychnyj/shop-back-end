@@ -17,7 +17,10 @@ namespace Shop.Data.EntityConfigurations.Orders
             builder.HasKey(o => o.Id);
             builder.HasIndex(o => o.Id).IsUnique();
             builder.Property(o => o.Id).UseIdentityColumn();
-            builder.Property(o => o.Product).IsRequired();
+            builder.Property(o => o.Name).IsRequired();
+            builder.Property(o => o.Price).IsRequired();
+            builder.Property(o => o.Quantity).IsRequired();
+            builder.Property(o => o.JsonParameters).IsRequired();
             builder.HasOne(o => o.Order)
                 .WithMany(x => x.Products)
                 .HasForeignKey(o => o.OrderId)
