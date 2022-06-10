@@ -54,8 +54,12 @@ namespace Shop.Domain.Helpers
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userLogin = jwtToken.Claims.First(u => u.Type == "Login").Value;
                 var user = repository.GetByIdAsync(userLogin).Result;
-                user!.Password = String.Empty;
-                
+
+                if (user != null)
+                {
+                    user.Password = String.Empty;
+                }
+
                 context.Items["User"] = user;
                 repository.Detach(user);
             }
