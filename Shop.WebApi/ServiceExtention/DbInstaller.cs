@@ -20,8 +20,6 @@ namespace Shop.WebApi.ServiceExtention
             .GetConnectionString("DefaultConnection"))
             );
 
-            Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
             Services.AddScoped<IRepository<User>, Repository<User>>();
             Services.AddScoped<IRepository<Category>, Repository<Category>>();
             Services.AddScoped<IRepository<Department>, Repository<Department>>();
@@ -36,6 +34,9 @@ namespace Shop.WebApi.ServiceExtention
             Services.AddScoped<IEntityService<Department>, EntityService<Department>>();
             Services.AddScoped<IEntityService<Product>, EntityService<Product>>();
             Services.AddScoped<IEntityService<JsonModel>, EntityService<JsonModel>>();
+            Services.AddScoped<IEntityService<Order>, EntityService<Order>>();
+            Services.AddScoped<IEntityService<OrderAddress>, EntityService<OrderAddress>>();
+            Services.AddScoped<IEntityService<OrderProduct>, EntityService<OrderProduct>>();
             Services.AddScoped<IOrderService, OrderService>();
             Services.AddScoped<ILoginService<User, UserAuthenticateResponse>, LoginUserService>();
             Services.AddScoped<ILoginService<Customer, Domain.Dto.User.CustomerAuthenticateResponse>, LoginCustomerService>();

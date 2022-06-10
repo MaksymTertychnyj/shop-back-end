@@ -12,6 +12,7 @@ namespace Shop.Domain.Services.Interfaces
     {
         Task<IEnumerable<TEntity>> GetAllEntitiesAsync();
         Task<IEnumerable<TEntity>> GetEntitiesByPropertyAsync(Expression<Func<TEntity, bool>> predicat);
+        Task<IEnumerable<TEntity>> GetWithIncludedEntities(Expression<Func<TEntity, bool>> predicat, params Expression<Func<TEntity, object>>[] includes);
         Task<TEntity> GetEntityByKeyAsync(object entityKey);
         Task<TEntity> AddEntityAsync(TEntity entity);
         Task<TEntity> UpdateEntityAsync(TEntity entity, object entityKey);
