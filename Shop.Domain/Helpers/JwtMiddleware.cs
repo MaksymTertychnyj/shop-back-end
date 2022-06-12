@@ -36,7 +36,7 @@ namespace Shop.Domain.Helpers
             await next(context);
         }
 
-        public void AttachUserToContext(HttpContext context, IRepository<User> repository, string token)
+        public async void AttachUserToContext(HttpContext context, IRepository<User> repository, string token)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace Shop.Domain.Helpers
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userLogin = jwtToken.Claims.First(u => u.Type == "Login").Value;
-                var user = repository.GetByIdAsync(userLogin).Result;
+                var user = await repository.GetByIdAsync(userLogin);
 
                 if (user != null)
                 {
