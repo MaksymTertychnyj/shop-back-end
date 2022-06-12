@@ -28,9 +28,15 @@ namespace Shop.Domain.Services.Implementation
             return result;
         }
 
-        public async Task<IEnumerable<TEntity>> GetWithIncludedEntities(Expression<Func<TEntity, bool>> predicat, params Expression<Func<TEntity, object>>[] includes)
+        public async Task<IEnumerable<TEntity>> GetWithIncludedEntities(Expression<Func<TEntity, bool>>? predicat, params Expression<Func<TEntity, object>>[] includes)
         {
-            return await Task.Run(() => repository.Query(includes).Where(predicat.Compile()));
+            var result = await Task.Run(() => repository.Query(includes));
+            if (predicat != null)
+            {
+                return result.Where(predicat.Compile());
+            }
+
+            return result;
         }
 
         public async Task<TEntity> AddEntityAsync(TEntity entity)
