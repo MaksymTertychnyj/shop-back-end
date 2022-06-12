@@ -2,6 +2,7 @@
 using Shop.Data.Entities;
 using Shop.Data.Entities.Orders;
 using Shop.Data.EntityConfigurations;
+using Shop.Data.EntityConfigurations.Orders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,9 @@ namespace Shop.Data.Context
             builder.ApplyConfiguration(new ImageConfiguration());
             builder.ApplyConfiguration(new JsonModelConfiguration());
             builder.ApplyConfiguration(new CustomerConfiguration());
+            builder.ApplyConfiguration(new OrderConfiguration());
+            builder.ApplyConfiguration(new OrderAddressConfiguration());
+            builder.ApplyConfiguration(new OrderProductConfiguration());
         }
     }
 }
