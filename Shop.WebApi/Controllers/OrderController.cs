@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop.Data.Entities.Orders;
-using Shop.Domain.Dto;
 using Shop.Domain.Helpers;
 using Shop.Domain.Services.Interfaces;
 
