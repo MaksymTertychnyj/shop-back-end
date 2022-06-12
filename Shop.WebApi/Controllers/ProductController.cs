@@ -11,38 +11,37 @@ namespace Shop.WebApi.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IEntityService<Product> productService;
+        private readonly ICacheService<Product> cacheService;
 
-        public ProductController(IEntityService<Product> productService)
+        public ProductController(IEntityService<Product> productService, ICacheService<Product> cacheService)
         {
             this.productService = productService;
+            this.cacheService = cacheService;
         }
 
         [HttpGet("getAll")]
-        public async Task<IActionResult> GetAllProductsAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return Ok(await productService.GetAllEntitiesAsync());
+            return await cacheService.GetEntitiesAsync();
         }
 
         [HttpGet("getById/{id}")]
         public async Task<IActionResult> GetProductAsync([FromRoute] int id)
         {
-            var productObj = await productService.GetEntityByKeyAsync(id);
+            var productObj = (await cacheService.GetEntitiesAsync())
+                             .FirstOrDefault(category => category.Id == id);
 
-            if (productObj == null)
-                return NotFound();
+            if (productObj != null)
+                return Ok(productObj);
 
-            return Ok(productObj);
+            return NotFound();
         }
 
         [HttpGet("getByCategory/{categoryId}")]
-        public async Task<IActionResult> GetProductByCategoryAsync([FromRoute] int categoryId)
+        public async Task<IEnumerable<Product>> GetProductByCategoryAsync([FromRoute] int categoryId)
         {
-            var products = await Task.Run(() => productService.GetEntitiesByPropertyAsync(p => p.CategoryId == categoryId));
-
-            if (products != null)
-                return Ok(products);
-
-            return NotFound();
+            return (await cacheService.GetEntitiesAsync())
+                   .Where(product => product.CategoryId == categoryId);
         }
 
         [Authorize(Roles = "admin, user")]
@@ -54,7 +53,10 @@ namespace Shop.WebApi.Controllers
                 var productObg = await productService.AddEntityAsync(product);
 
                 if (productObg != null)
+                {
+                    await cacheService.UpdateEntitiesAsync();
                     return Ok(product);
+                }
 
                 return BadRequest(new {message = "adding the product has been failed"});
             }
@@ -71,7 +73,10 @@ namespace Shop.WebApi.Controllers
                 var productObj = await productService.UpdateEntityAsync(product, product.Id);
 
                 if (productObj != null)
+                {
+                    await cacheService.UpdateEntitiesAsync();
                     return Ok(product);
+                }
 
                 return BadRequest(new {message = "updating the product has been failed"});
             }
@@ -83,11 +88,13 @@ namespace Shop.WebApi.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteProductAsync([FromRoute] int id)
         {
-            var productObj = await productService.GetEntityByKeyAsync(id);
+            var productObj = (await cacheService.GetEntitiesAsync())
+                             .FirstOrDefault(category => category.Id == id);
 
             if (productObj != null)
             {
                 await productService.DeleteEntityAsync(productObj);
+                await cacheService.UpdateEntitiesAsync();
                 return Ok();
             }
 

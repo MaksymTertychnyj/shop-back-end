@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Shop.Data.Entities;
 using Shop.Domain.Helpers;
 using Shop.Domain.Services.Interfaces;
@@ -10,38 +11,52 @@ namespace Shop.WebApi.Controllers
     public class DepartmentController : ControllerBase
     {
         private readonly IEntityService<Department> departmentService;
+        private readonly ICacheService<Department> cacheDepartmentService;
+        private readonly ICacheService<Category> cacheCategoryService;
+        private readonly ICacheService<Product> cacheProductService;
 
-        public DepartmentController(IEntityService<Department> departmentService)
+        public DepartmentController(
+                        IEntityService<Department> departmentService, 
+                        ICacheService<Department> cacheDepartmentService,
+                        ICacheService<Category> cacheCategoryService,
+                        ICacheService<Product> cacheProductService
+                        )
         {
             this.departmentService = departmentService;
+            this.cacheDepartmentService = cacheDepartmentService;
+            this.cacheCategoryService = cacheCategoryService;
+            this.cacheProductService = cacheProductService;
         }
 
         [HttpGet("getAll")]
-        public async Task<IActionResult> GetAllDepartmentsAsync()
+        public async Task<IEnumerable<Department>> GetAllDepartmentsAsync()
         {
-            return Ok(await departmentService.GetAllEntitiesAsync());
+             return await cacheDepartmentService.GetEntitiesAsync();
         }
 
         [HttpGet("getById/{id}")]
         public async Task<IActionResult> GetDepartmentAsync([FromRoute] int id)
         {
-            var department = await departmentService.GetEntityByKeyAsync(id);
+            var department = (await cacheDepartmentService.GetEntitiesAsync())
+                .FirstOrDefault(d => d.Id == id);
 
-            if (department == null)
-                return NotFound();
+            if (department != null)
+                return Ok(department);
 
-            return Ok(department);
+            return NotFound();
         }
 
         [Authorize(Roles = "admin")]
         [HttpPost("add/{name}")]
         public async Task<IActionResult> AddDepartmentAsync([FromRoute] string name)
         {
-
                 var departmentObj = await departmentService.AddEntityAsync(new Department { Name = name});
 
                 if (departmentObj != null)
+                {
+                    await cacheDepartmentService.UpdateEntitiesAsync();
                     return Ok(departmentObj);
+                }
 
                 return BadRequest(new {message = "adding department has been failed"});
         }
@@ -55,7 +70,10 @@ namespace Shop.WebApi.Controllers
                 var departmentObj = await departmentService.UpdateEntityAsync(department, (int)department.Id);
 
                 if (departmentObj != null)
+                {
+                    await cacheDepartmentService.UpdateEntitiesAsync();
                     return Ok(department);
+                }
 
                 return BadRequest(new {message = "updating the department has been failed"});
             }
@@ -67,11 +85,15 @@ namespace Shop.WebApi.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteDepartmentAsync([FromRoute] int id)
         {
-            var departmentObj = await departmentService.GetEntityByKeyAsync(id);
+            var departmentObj = (await cacheDepartmentService.GetEntitiesAsync())
+                .FirstOrDefault(d => d.Id == id);
 
             if (departmentObj != null)
             {
                 await departmentService.DeleteEntityAsync(departmentObj);
+                await cacheDepartmentService.UpdateEntitiesAsync();
+                await cacheCategoryService.UpdateEntitiesAsync();
+                await cacheProductService.UpdateEntitiesAsync();
                 return Ok();
             }
 

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Shop.Data.Entities;
 using Shop.Data.Infrastructure;
 using Shop.Domain.Helpers;
+using Shop.Domain.Services.Implementation;
 using Shop.Domain.Services.Interfaces;
 
 namespace Shop.WebApi.Controllers
@@ -11,37 +13,45 @@ namespace Shop.WebApi.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly IEntityService<Category> categoryService;
+        private readonly ICacheService<Category> cacheCategoryService;
+        private readonly ICacheService<Category> cacheProductService;
 
-        public CategoryController(IEntityService<Category> entityService)
+        public CategoryController(
+                    IEntityService<Category> categoryService, 
+                    ICacheService<Category> cacheCategoryService,
+                    ICacheService<Category> cacheProductService
+                    )
         {
-            categoryService = entityService;
+            this.categoryService = categoryService;
+            this.cacheCategoryService = cacheCategoryService;
+            this.cacheProductService = cacheProductService;
         }
 
         [HttpGet("getAll")]
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            return await categoryService.GetAllEntitiesAsync();
+            return await cacheCategoryService.GetEntitiesAsync();   
         }
 
         [HttpGet("getByDepartment/{departmentId}")]
         public async Task<IEnumerable<Category>> GetCategoriesByDepartment([FromRoute] int departmentId)
         {
-            return await Task.Run(() => categoryService.GetEntitiesByPropertyAsync(c => c.DepartmentId == departmentId));
+            return (await cacheCategoryService.GetEntitiesAsync())
+                .Where(category => category.DepartmentId == departmentId);              
         }
-
 
         [Authorize(Roles = "admin, user")]
         [HttpGet("getById/{key}")]
         public async Task<IActionResult> GetCategoryAsync([FromRoute] int key)
         {
-            var category = await categoryService.GetEntityByKeyAsync(key);
+            var category = (await cacheCategoryService.GetEntitiesAsync())
+                           .FirstOrDefault(category => category.Id == key);     
 
             if (category != null)
                 return Ok(category);
 
             return NotFound();
         }
-
 
         [Authorize(Roles = "admin")]
         [HttpPost("add/{name}/{departmentId}")]
@@ -56,8 +66,10 @@ namespace Shop.WebApi.Controllers
                     });
 
                 if (categoryObj != null)
+                {
+                    await cacheCategoryService.UpdateEntitiesAsync();
                     return Ok(categoryObj);
-                    
+                }
 
                 return BadRequest(new { message = "adding category has been failed" });
             }
@@ -69,11 +81,14 @@ namespace Shop.WebApi.Controllers
         [HttpDelete("delete/{key}")]
         public async Task<IActionResult> DeleteCategoryAsync([FromRoute] int key)
         {
-            Category categoryObj = await categoryService.GetEntityByKeyAsync(key);
+            var categoryObj = (await cacheCategoryService.GetEntitiesAsync())
+                                     .FirstOrDefault(category => category.Id == key);
 
             if (categoryObj != null)
             {
                 await categoryService.DeleteEntityAsync(categoryObj);
+                await cacheCategoryService.UpdateEntitiesAsync();
+                await cacheProductService.UpdateEntitiesAsync();
                 return Ok();
             }
 
@@ -90,6 +105,7 @@ namespace Shop.WebApi.Controllers
 
                 if (result != null)
                 {
+                    await cacheCategoryService.UpdateEntitiesAsync();
                     return Ok(result);
                 }
 
