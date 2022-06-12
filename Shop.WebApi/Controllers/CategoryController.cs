@@ -14,17 +14,14 @@ namespace Shop.WebApi.Controllers
     {
         private readonly IEntityService<Category> categoryService;
         private readonly ICacheService<Category> cacheCategoryService;
-        private readonly ICacheService<Category> cacheProductService;
 
         public CategoryController(
                     IEntityService<Category> categoryService, 
-                    ICacheService<Category> cacheCategoryService,
-                    ICacheService<Category> cacheProductService
+                    ICacheService<Category> cacheCategoryService
                     )
         {
             this.categoryService = categoryService;
             this.cacheCategoryService = cacheCategoryService;
-            this.cacheProductService = cacheProductService;
         }
 
         [HttpGet("getAll")]
@@ -79,7 +76,7 @@ namespace Shop.WebApi.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("delete/{key}")]
-        public async Task<IActionResult> DeleteCategoryAsync([FromRoute] int key)
+        public async Task<IActionResult> DeleteCategoryAsync([FromServices]ICacheService<Product> cacheProductService,  [FromRoute] int key)
         {
             var categoryObj = (await cacheCategoryService.GetEntitiesAsync())
                                      .FirstOrDefault(category => category.Id == key);
