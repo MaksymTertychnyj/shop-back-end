@@ -53,8 +53,9 @@ namespace Shop.Domain.Helpers
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userLogin = jwtToken.Claims.First(u => u.Type == "Login").Value;
+#pragma warning disable CA2012
                 var user = repository.GetByIdAsync(userLogin).Result;
-
+#pragma warning restore CA2012
                 if (user != null)
                 {
                     user.Password = String.Empty;

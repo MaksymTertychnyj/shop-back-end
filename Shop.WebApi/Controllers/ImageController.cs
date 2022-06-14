@@ -29,7 +29,7 @@ namespace Shop.WebApi.Controllers
 
         [Authorize(Roles = "admin, user")]
         [HttpPost("add")]
-        public async Task<IActionResult> AddImageAsync([FromForm]Image image)
+        public async Task<IActionResult> AddImageAsync()
         {
             if (ModelState.IsValid)
             {
