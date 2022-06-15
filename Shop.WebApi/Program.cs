@@ -2,6 +2,7 @@ using Shop.Domain.Helpers;
 using Shop.WebApi.ServiceExtention;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("credentials.json", optional: true, reloadOnChange: true);
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options => 
@@ -19,6 +20,7 @@ builder.Services.AddCacheInstaller();
 
 builder.Services.AddDbInstaller(builder.Configuration);
 builder.Services.AddSwaggerInstaller();
+builder.Services.AddNovaPochtaClient(builder.Configuration);
 
 var app = builder.Build();
 
