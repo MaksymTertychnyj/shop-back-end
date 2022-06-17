@@ -1,7 +1,6 @@
-using MediatR;
 using Shop.Domain.Helpers;
-using Shop.Domain.Infrastructure;
 using Shop.WebApi.ServiceExtention;
+using NovaPochta;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("credentials.json", optional: true, reloadOnChange: true);
@@ -22,7 +21,7 @@ builder.Services.AddCacheInstaller();
 
 builder.Services.AddDbInstaller(builder.Configuration);
 builder.Services.AddSwaggerInstaller();
-builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddNovaPochtaServices(builder.Configuration);
 
 var app = builder.Build();
 

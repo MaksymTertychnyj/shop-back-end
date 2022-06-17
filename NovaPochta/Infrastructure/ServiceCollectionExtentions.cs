@@ -1,18 +1,13 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Shop.Domain.Helpers;
-using Shop.Domain.Mapping.NovaPochta;
-using Shop.Domain.Services.Implementation.NovaPochta;
-using Shop.Domain.Services.Interfaces.NovaPochta;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using NovaPochta.Mapping;
+using NovaPochta.Services.Interfaces;
+using NovaPochta.Services.Implementation;
+using NovaPochta.Helpers;
 
-namespace Shop.Domain.Infrastructure
+namespace NovaPochta.Infrastructure
 {
     public static class ServiceCollectionExtentions
     {

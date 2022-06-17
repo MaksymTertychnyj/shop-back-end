@@ -1,12 +1,7 @@
 ﻿using MediatR;
-using Shop.Domain.Dto.NovaPochta;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NovaPochta.Dto;
 
-namespace Shop.Domain.Infrastructure.MediatR.NovaPochta
+namespace NovaPochta.Infrastructure.MediatR.Addresses
 {
     public class GetCitiesRequest : IRequest<List<CityDto>>
     {

@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NovaPochta\NovaPochta.csproj" />
     <ProjectReference Include="..\Shop.Data\Shop.Data.csproj" />
     <ProjectReference Include="..\Shop.Domain\Shop.Domain.csproj" />
   </ItemGroup>

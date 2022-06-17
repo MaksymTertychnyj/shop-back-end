@@ -1,10 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Shop.Domain.Dto.NovaPochta;
-using Shop.Domain.Dto.NovaPochta.Enums;
-using Shop.Domain.Infrastructure.MediatR.NovaPochta;
-using Shop.Domain.Services.Interfaces.NovaPochta;
-using System.Text.Json;
+using NovaPochta.Infrastructure.MediatR.Addresses;
 
 namespace Shop.WebApi.Controllers
 {

@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Nancy.Json;
-using Shop.Domain.Dto.NovaPochta;
-using Shop.Domain.Helpers;
-using Shop.Domain.Services.Interfaces.NovaPochta;
+using NovaPochta.Dto;
+using NovaPochta.Helpers;
+using NovaPochta.Services.Interfaces;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace Shop.Domain.Services.Implementation.NovaPochta
+namespace NovaPochta.Services.Implementation
 {
     public class AddressService : IAddressService
     {

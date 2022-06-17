@@ -1,15 +1,10 @@
 ﻿using MediatR;
-using Shop.Domain.Dto.NovaPochta;
-using Shop.Domain.Dto.NovaPochta.Enums;
-using Shop.Domain.Services.Interfaces.NovaPochta;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using NovaPochta.Dto;
+using NovaPochta.Dto.Enums;
+using NovaPochta.Services.Interfaces;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace Shop.Domain.Infrastructure.MediatR.NovaPochta
+namespace NovaPochta.Infrastructure.MediatR.Addresses
 {
     public class GetWarehousesRequestHandler : IRequestHandler<GetWarehousesRequest, List<WarehouseDto>>
     {

@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
-using Shop.Domain.Dto.NovaPochta;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NovaPochta.Dto;
 
-namespace Shop.Domain.Mapping.NovaPochta
+namespace NovaPochta.Mapping
 {
     public class MapRequestProfile : Profile
     {

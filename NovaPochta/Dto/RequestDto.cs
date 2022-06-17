@@ -1,4 +1,4 @@
-﻿namespace Shop.Domain.Dto.NovaPochta
+﻿namespace NovaPochta.Dto
 {
     public class RequestDto
     {
