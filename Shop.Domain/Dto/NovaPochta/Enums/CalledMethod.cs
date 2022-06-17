@@ -10,6 +10,7 @@ namespace Shop.Domain.Dto.NovaPochta.Enums
     {
         getAreas,
         getSettlements,
+        getCities,
         getWarehouses
     }
 }
