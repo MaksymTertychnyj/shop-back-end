@@ -11,21 +11,18 @@ namespace Shop.Domain.Services.Implementation.NovaPochta
     public class AddressService : IAddressService
     {
         private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
 
-        public AddressService(HttpClient httpClient)
+        public AddressService(HttpClient httpClient, IMapper mapper)
         {
             _httpClient = httpClient;
+            _mapper = mapper;
         }
 
         public async Task<string> FetchDataAsync(RequestDto requestData)
         {
-            var request = new
-            {
-                apiKey = _httpClient.GetApiKey(),
-                modelName = requestData.ModelName,
-                calledMethod = requestData.CalledMethod,
-                methodProperties = requestData.MethodProperties,
-            };
+            var request = _mapper.Map<Request>(requestData);
+            request.apiKey = _httpClient.GetApiKey();
 
             var serializerOptions = new JsonSerializerOptions()
             {

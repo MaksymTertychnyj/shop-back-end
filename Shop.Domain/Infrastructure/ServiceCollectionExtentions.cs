@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shop.Domain.Helpers;
+using Shop.Domain.Mapping.NovaPochta;
 using Shop.Domain.Services.Implementation.NovaPochta;
 using Shop.Domain.Services.Interfaces.NovaPochta;
 using System;
@@ -17,6 +19,11 @@ namespace Shop.Domain.Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMediatR(typeof(ServiceCollectionExtentions));
+            services.AddSingleton(new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MapRequestProfile());
+            }).CreateMapper());
+
             services.AddHttpClient<IAddressService, AddressService>(client =>
             {
                 client.BaseAddress = new Uri(configuration["NovaPochta:BaseAddress"]);
