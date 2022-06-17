@@ -1,4 +1,6 @@
-﻿using Shop.Domain.Dto.NovaPochta;
+﻿using AutoMapper;
+using Nancy.Json;
+using Shop.Domain.Dto.NovaPochta;
 using Shop.Domain.Helpers;
 using Shop.Domain.Services.Interfaces.NovaPochta;
 using System.Net.Http.Json;
@@ -17,17 +19,23 @@ namespace Shop.Domain.Services.Implementation.NovaPochta
 
         public async Task<string> FetchDataAsync(RequestDto requestData)
         {
-            var request = new {
+            var request = new
+            {
                 apiKey = _httpClient.GetApiKey(),
-                modelName = requestData.modelName,
-                calledMethod = requestData.calledMethod,
-                methodProperties = requestData.methodProperties
+                modelName = requestData.ModelName,
+                calledMethod = requestData.CalledMethod,
+                methodProperties = requestData.MethodProperties,
+            };
+
+            var serializerOptions = new JsonSerializerOptions()
+            {
+                IncludeFields = true,
             };
 
             try
             {
-                var response = await _httpClient.PostAsJsonAsync(_httpClient.BaseAddress, request);
-                return await response.Content.ReadAsStringAsync();
+                 var response = await _httpClient.PostAsJsonAsync(_httpClient.BaseAddress, request, serializerOptions);
+                 return await response.Content.ReadAsStringAsync();
             }
             catch (Exception)
             {
