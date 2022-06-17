@@ -1,4 +1,6 @@
+using MediatR;
 using Shop.Domain.Helpers;
+using Shop.Domain.Infrastructure;
 using Shop.WebApi.ServiceExtention;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +22,7 @@ builder.Services.AddCacheInstaller();
 
 builder.Services.AddDbInstaller(builder.Configuration);
 builder.Services.AddSwaggerInstaller();
-builder.Services.AddNovaPochtaClient(builder.Configuration);
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 

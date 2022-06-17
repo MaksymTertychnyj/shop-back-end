@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Shop.Domain.Dto.NovaPochta;
 using Shop.Domain.Dto.NovaPochta.Enums;
+using Shop.Domain.Infrastructure.MediatR.NovaPochta;
 using Shop.Domain.Services.Interfaces.NovaPochta;
 using System.Text.Json;
 
@@ -10,25 +12,32 @@ namespace Shop.WebApi.Controllers
     [Route("address/")]
     public class AddressController : ControllerBase
     {
-        private readonly IAddressService _addressService;
+        private readonly IMediator _mediator;
 
-        public AddressController(IAddressService addressService)
+        public AddressController(IMediator mediator)
         {
-            _addressService = addressService;
+            _mediator = mediator;
         }
 
         [HttpGet("getAreas")]
         public async Task<IActionResult> GetAreas()
         {
-            var request = new RequestDto
-            {
-                modelName = "Address",
-                calledMethod = "getAreas",
-                methodProperties = null
-            };
-            var response = await _addressService.FetchDataAsync(request);
-            
-            return Ok(JsonSerializer.Deserialize<AreaResponseDto<AreaDto>>(response)!.data);
+            var areas = await _mediator.Send(new GetAreasRequest());
+            return Ok(areas);
+        }
+
+        [HttpGet("getCities/{areaRef}")]
+        public async Task<IActionResult> GetCities([FromRoute] string areaRef)
+        {
+            var cities = await _mediator.Send(new GetCitiesRequest(areaRef));
+            return Ok(cities);
+        }
+
+        [HttpGet("getWarehouses/{cityRef}")]
+        public async Task<IActionResult> GetWarehouses(string cityRef)
+        {
+            var warehouses = await _mediator.Send(new GetWarehousesRequest(cityRef));
+            return Ok(warehouses);
         }
     }
 }
