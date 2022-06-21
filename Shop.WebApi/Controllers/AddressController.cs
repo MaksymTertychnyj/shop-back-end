@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NovaPochta.Infrastructure.MediatR.Addresses;
+using Shop.Domain.Helpers;
 
 namespace Shop.WebApi.Controllers
 {
@@ -15,6 +16,7 @@ namespace Shop.WebApi.Controllers
             _mediator = mediator;
         }
 
+        [Authorize]
         [HttpGet("getAreas")]
         public async Task<IActionResult> GetAreas()
         {
@@ -22,6 +24,7 @@ namespace Shop.WebApi.Controllers
             return Ok(areas);
         }
 
+        [Authorize]
         [HttpGet("getCities/{areaRef}")]
         public async Task<IActionResult> GetCities([FromRoute] string areaRef)
         {
@@ -29,6 +32,7 @@ namespace Shop.WebApi.Controllers
             return Ok(cities);
         }
 
+        [Authorize]
         [HttpGet("getWarehouses/{cityRef}")]
         public async Task<IActionResult> GetWarehouses(string cityRef)
         {

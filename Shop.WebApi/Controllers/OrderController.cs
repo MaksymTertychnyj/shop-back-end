@@ -70,7 +70,7 @@ namespace Shop.WebApi.Controllers
 
         [Authorize]
         [HttpPost("add")]
-        public async Task<IActionResult> ConfirmOrderAsync([FromBody] Order order)
+        public async Task<IActionResult> ConfirmOrderAsync([FromBody]Order order)
         {
             var orderObj = await orderService.AddEntityAsync(order);
 
