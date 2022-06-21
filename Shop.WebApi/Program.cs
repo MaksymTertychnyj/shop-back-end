@@ -1,6 +1,9 @@
 using Shop.Domain.Helpers;
 using Shop.WebApi.ServiceExtention;
 using NovaPochta;
+using AutoMapper;
+using Shop.Domain.Mapping;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("credentials.json", optional: true, reloadOnChange: true);
