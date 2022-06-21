@@ -14,10 +14,6 @@ namespace NovaPochta.Infrastructure
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMediatR(typeof(ServiceCollectionExtentions));
-            services.AddSingleton(new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MapRequestProfile());
-            }).CreateMapper());
 
             services.AddHttpClient<IAddressService, AddressService>(client =>
             {

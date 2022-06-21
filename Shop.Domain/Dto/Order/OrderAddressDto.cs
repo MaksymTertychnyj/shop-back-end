@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shop.Domain.Dto.Order
+﻿namespace Shop.Domain.Dto.Order
 {
     public class OrderAddressDto
     {
