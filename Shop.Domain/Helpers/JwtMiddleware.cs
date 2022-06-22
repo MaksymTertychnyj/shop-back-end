@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Shop.Data.Entities;
+using Shop.Data.Enums;
 using Shop.Data.Infrastructure;
 using Shop.Domain.Dto;
 using Shop.Domain.Services.Interfaces;
@@ -24,19 +25,28 @@ namespace Shop.Domain.Helpers
             this.configuration = configuration;
         }
 
-        public async Task Invoke(HttpContext context, IRepository<User> repository)
+        public async Task Invoke(HttpContext context, IRepository<User> userRepository, IRepository<Customer> customerRepository)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var visitor = context.Request.Headers["Visitor"];
 
             if (token != null)
             {
-                AttachUserToContext(context, repository, token);
+                if (visitor == "employee")
+                {
+                    AttachUserToContext(context, userRepository, token);
+                }
+                if (visitor == "customer")
+                {
+                    AttachUserToContext(context, customerRepository, token);
+                }
             }
 
             await next(context);
         }
 
-        public void AttachUserToContext(HttpContext context, IRepository<User> repository, string token)
+        public void AttachUserToContext<TEntity>(HttpContext context, IRepository<TEntity> repository, string token)
+            where TEntity : class
         {
             try
             {
@@ -58,7 +68,7 @@ namespace Shop.Domain.Helpers
 #pragma warning restore CA2012
                 if (user != null)
                 {
-                    user.Password = String.Empty;
+                    //user.Password = String.Empty;
                     context.Items["User"] = user;
                     repository.Detach(user);
                 }
