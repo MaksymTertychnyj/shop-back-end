@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop.Data.Entities;
 using Shop.Domain.Dto;
+using Shop.Domain.Dto.CustomerDto;
 using Shop.Domain.Dto.User;
+using Shop.Domain.Helpers;
 using Shop.Domain.Services.Interfaces;
 
 namespace Shop.WebApi.Controllers
@@ -11,10 +13,15 @@ namespace Shop.WebApi.Controllers
     public class LoginCustomerController : ControllerBase
     {
         private readonly ILoginService<Customer, CustomerAuthenticateResponse> loginService;
+        private readonly ICustomerService customerService;
 
-        public LoginCustomerController(ILoginService<Customer, CustomerAuthenticateResponse> service)
+        public LoginCustomerController(
+                                        ILoginService<Customer, CustomerAuthenticateResponse> loginService, 
+                                        ICustomerService customerService
+                                      )
         {
-            loginService = service;
+            this.loginService = loginService;
+            this.customerService = customerService;
         }
 
         [HttpPost("register")]
@@ -51,6 +58,21 @@ namespace Shop.WebApi.Controllers
             }
 
             return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPut("update")]
+        public async Task<IActionResult> Update([FromBody]CustomerUpdateDto customerData)
+        {
+            var customer = (Customer?)HttpContext.Items["User"];
+            
+            if (customer != null)
+            {
+                var result = await customerService.UpdateCustomer(customer.Login, customerData);
+                return Ok(result);
+            }
+
+            return BadRequest();
         }
     }
 }

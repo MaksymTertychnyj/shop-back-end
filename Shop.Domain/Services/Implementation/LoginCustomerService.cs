@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Shop.Data.Entities;
 using Shop.Data.Infrastructure;
 using Shop.Domain.Dto;
+using Shop.Domain.Dto.CustomerDto;
 using Shop.Domain.Dto.User;
 using Shop.Domain.Helpers;
 using Shop.Domain.Services.Interfaces;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Domain.Services.Implementation
 {
-    public class LoginCustomerService : ILoginService<Customer, CustomerAuthenticateResponse>
+    public class LoginCustomerService : ILoginService<Customer, CustomerAuthenticateResponse>, ICustomerService
     {
         private readonly IRepository<Customer> repository;
         private readonly IConfiguration configuration;
@@ -60,6 +61,34 @@ namespace Shop.Domain.Services.Implementation
             customer.Password = "";
 
             return customer;
+        }
+
+        public async Task<Customer> UpdateCustomer(string customerLogin, CustomerUpdateDto data)
+        {
+            var customer = await repository.GetByIdAsync(customerLogin);
+
+            if (customer != null)
+            {
+                customer.FirstName = data.FirstName;
+                customer.LastName = data.LastName;
+                customer.Email = data.Email;
+                customer.PhoneNumber = data.PhoneNumber;
+                customer.Address = data.Address;
+
+                try
+                {
+                    var result = await repository.UpdateAsync(customer);
+                    await repository.SaveChangesAsync();
+
+                    return result;
+                }
+                catch (Exception)
+                {
+                    return null!;
+                }
+            }
+
+            return null!;
         }
 
         private string ToHash(string key)

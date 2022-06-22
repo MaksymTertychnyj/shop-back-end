@@ -4,6 +4,7 @@ using NovaPochta;
 using AutoMapper;
 using Shop.Domain.Mapping;
 using System.Reflection;
+using Shop.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("credentials.json", optional: true, reloadOnChange: true);
@@ -48,6 +49,7 @@ app.UseCors(x => x
     .AllowAnyHeader());
 
 app.UseMiddleware<JwtMiddleware>();
+
 app.UseEndpoints(endpoints => endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller}/action/{key?}"
