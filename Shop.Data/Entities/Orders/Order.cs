@@ -12,6 +12,7 @@ namespace Shop.Data.Entities.Orders
         public int Id { get; set; }
         public DateTime DateRegister { get; set; } = DateTime.Now;
         public OrderStatus Status { get; set; } = OrderStatus.negotiation;
+        public double Amount { get; set; }
         public OrderAddress? OrderAddress { get; set; }
         public string CustomerLogin { get; set; } = string.Empty;
         public Customer? Customer { get; set; }

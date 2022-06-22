@@ -68,8 +68,8 @@ namespace Shop.WebApi.Controllers
                );
             if (result != null)
             {
-                var order = _mapper.Map<OrderDto>(result);
-                return Ok(order);
+                var orders = _mapper.Map<IEnumerable<OrderDto>>(result);
+                return Ok(orders);
             }
 
             return NotFound();
