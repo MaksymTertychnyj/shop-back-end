@@ -20,6 +20,7 @@ namespace Shop.Domain.Mapping
                 .ReverseMap();
 
             CreateMap<OrderProductDto, OrderProduct>()
+                .ForMember(p => p.Id, opt => opt.Ignore())
                 .ReverseMap();
         }
     }
