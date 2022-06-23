@@ -11,97 +11,54 @@ namespace Shop.WebApi.Controllers
     [Route("order/")]
     public class OrderController : ControllerBase
     {
-        private readonly IEntityService<Order> orderService;
-        private readonly IEntityService<OrderAddress> addressService;
-        private readonly IEntityService<OrderProduct> productService;
-        private readonly IMapper _mapper;
+        private readonly IOrderService orderService;
 
-        public OrderController(
-            IEntityService<Order> orderService,
-            IEntityService<OrderAddress> addressService, 
-            IEntityService<OrderProduct> productService,
-            IMapper mapper
-            )          
+        public OrderController(IOrderService orderService)          
         {
             this.orderService = orderService;
-            this.addressService = addressService;
-            this.productService = productService;
-            _mapper = mapper;
         }
 
         [Authorize]
         [HttpGet("getAll")]
-        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+        public async Task<IEnumerable<Order>> GetAllOrders()
         {
-            await addressService.GetAllEntitiesAsync();
-            await productService.GetAllEntitiesAsync();
-
-            return await orderService.GetAllEntitiesAsync();
+            return await orderService.GetAllOrdersAsync();
         }
 
         [Authorize]
         [HttpGet("getById/{orderId}")]
-        public async Task<IActionResult> GetOrderByIdAsync([FromRoute]int orderId)
+        public async Task<IActionResult> GetOrderById([FromRoute]int orderId)
         {
-            var result = await orderService.GetWithIncludedEntities(
-                o => o.Id == orderId,
-                o => o.OrderAddress!,
-                o => o.Products
-               );
-            if (result != null)
-            {
-                var order = _mapper.Map<OrderDto>(result);
-                return Ok(order);
-            }
+            var order = await orderService.GetOrderByIdAsync(orderId);
 
-            return NotFound();
+            return order != null ? Ok(order) : NotFound();
         }
 
         [Authorize]
         [HttpGet("getByCustomer/{customerLogin}")]
         public async Task<IActionResult> GetOrdersByCustomer([FromRoute]string customerLogin)
         {
-            var result = await orderService.GetWithIncludedEntities(
-                o => o.CustomerLogin == customerLogin, 
-                o => o.OrderAddress!, 
-                o => o.Products
-               );
-            if (result != null)
-            {
-                var orders = _mapper.Map<IEnumerable<OrderDto>>(result);
-                return Ok(orders);
-            }
+            var orders = await orderService.GetOrdersByCustomerAsync(customerLogin);
 
-            return NotFound();
+            return orders != null ? Ok(orders) : NotFound();
         }
 
         [Authorize]
         [HttpPost("add")]
-        public async Task<IActionResult> ConfirmOrderAsync([FromBody]OrderDto order)
+        public async Task<IActionResult> ConfirmOrder([FromBody] OrderDto order)
         {
-            var orderEntity = _mapper.Map<Order>(order);
-            var orderObj = await orderService.AddEntityAsync(orderEntity);
+            var result = await orderService.ConfirmOrderAsync(order);
 
-            if (orderObj == null)
-            {
-                return BadRequest(new { message = "confirming the order has been failed" });
-            }
-
-            return Ok();
+            return result != null ? Ok(result) : BadRequest(new { message = "confirming the order has been failed" });
         }
 
         [Authorize]
         [HttpDelete("delete/{orderId}")]
-        public async Task<IActionResult> DeleteOrderAsync([FromRoute]int orderId)
+        public async Task<IActionResult> DeleteOrder([FromRoute]int orderId)
         {
-            var order = await orderService.GetEntityByKeyAsync(orderId);
-            if (order != null)
-            {
-                await Task.Run(() => orderService.DeleteEntityAsync(order));
-                return Ok();
-            }
-
-            return BadRequest(new { message = "deleting the order has been failed" });
+            var result = await orderService.DeleteOrderAsync(orderId);
+         
+            return result ? Ok() : BadRequest(new { message = "deleting the order has been failed" });
         }
 
         //[Authorize]
