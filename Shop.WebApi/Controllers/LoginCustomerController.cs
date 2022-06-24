@@ -13,15 +13,10 @@ namespace Shop.WebApi.Controllers
     public class LoginCustomerController : ControllerBase
     {
         private readonly ILoginService<Customer, CustomerAuthenticateResponse> loginService;
-        private readonly ICustomerService customerService;
 
-        public LoginCustomerController(
-                                        ILoginService<Customer, CustomerAuthenticateResponse> loginService, 
-                                        ICustomerService customerService
-                                      )
+        public LoginCustomerController(ILoginService<Customer, CustomerAuthenticateResponse> loginService)
         {
             this.loginService = loginService;
-            this.customerService = customerService;
         }
 
         [HttpPost("register")]
@@ -58,21 +53,6 @@ namespace Shop.WebApi.Controllers
             }
 
             return Ok(response);
-        }
-
-        [Authorize]
-        [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody]CustomerUpdateDto customerData)
-        {
-            var customer = (Customer?)HttpContext.Items["User"];
-            
-            if (customer != null)
-            {
-                var result = await customerService.UpdateCustomer(customer.Login, customerData);
-                return Ok(result);
-            }
-
-            return BadRequest();
         }
     }
 }
