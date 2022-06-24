@@ -40,9 +40,9 @@ namespace Shop.WebApi.ServiceExtention
             Services.AddScoped<IOrderService, OrderService>();
             Services.AddScoped<ILoginService<User, UserAuthenticateResponse>, LoginUserService>();
             Services.AddScoped<ILoginService<Customer, Domain.Dto.User.CustomerAuthenticateResponse>, LoginCustomerService>();
-            Services.AddScoped<ICustomerService, LoginCustomerService>();
             Services.AddScoped<IEmployeeService, EmployeeService>();
             Services.AddScoped<IImageService, ImageService>();
+            Services.AddScoped<ICustomerService, CustomerService>();
         }
     }
 }
