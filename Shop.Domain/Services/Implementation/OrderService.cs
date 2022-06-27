@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Shop.Data.Entities;
 using Shop.Data.Entities.Orders;
+using Shop.Data.Enums;
 using Shop.Data.Infrastructure;
 using Shop.Domain.Dto.Order;
 using Shop.Domain.Services.Interfaces;
@@ -94,6 +95,37 @@ namespace Shop.Domain.Services.Implementation
             }
         }
 
+        public async Task<OrderDto> UpdateOrderAsync(OrderDto order)
+        {
+            var orderEntity = await GetOrderByDateRegister(order);
+            if (orderEntity != null)
+            {
+                var orderObj = _mapper.Map<Order>(order);
+                orderObj.Id = orderEntity.Id;
+
+               var result = await orderService.UpdateEntityAsync(orderObj, orderEntity.Id);
+               return _mapper.Map<OrderDto>(result);
+            }
+
+            return null!;
+        }
+
+        public async Task<OrderDto> UpdateStatusAsync(OrderDto order, OrderStatus status)
+        {
+            var orderEntity = await GetOrderByDateRegister(order);
+            if (orderEntity != null)
+            {
+                var orderObj = _mapper.Map<Order>(order);
+                orderObj.Id = orderEntity.Id;
+                orderObj.Status = status;
+
+                var result = await orderService.UpdateEntityAsync(orderObj, orderEntity.Id);
+                return _mapper.Map<OrderDto>(result);
+            }
+
+            return null!;
+        }
+
         public async Task<bool> DeleteOrderAsync(int orderId)
         {
             var order = await orderService.GetEntityByKeyAsync(orderId);
@@ -106,5 +138,13 @@ namespace Shop.Domain.Services.Implementation
             return false;
         }
 
+        private async Task<Order> GetOrderByDateRegister(OrderDto order)
+        {
+            return await Task.Run(() => orderService.GetWithIncludedEntities(
+                                o => o.CustomerLogin == order.CustomerLogin,
+                                o => o.OrderAddress!,
+                                o => o.Products
+                               ).Result.FirstOrDefault(o => o.DateRegister == order.DateRegister)!);
+        }
     }
 }

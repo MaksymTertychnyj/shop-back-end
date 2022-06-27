@@ -1,4 +1,5 @@
 ﻿using Shop.Data.Entities.Orders;
+using Shop.Data.Enums;
 using Shop.Domain.Dto.Order;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace Shop.Domain.Services.Interfaces
         Task<OrderDto> GetOrderByIdAsync(int orderId);
         Task<IEnumerable<OrderDto>> GetOrdersByCustomerAsync(string customerLogin);
         Task<OrderDto> ConfirmOrderAsync(OrderDto order);
+        Task<OrderDto> UpdateOrderAsync(OrderDto order);
+        Task<OrderDto> UpdateStatusAsync(OrderDto order, OrderStatus status);
         Task<bool> DeleteOrderAsync(int orderId);
     }
 }
