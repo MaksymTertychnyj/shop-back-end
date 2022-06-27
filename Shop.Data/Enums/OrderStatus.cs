@@ -8,11 +8,11 @@ namespace Shop.Data.Enums
 {
     public enum OrderStatus
     {
-        registered,
-        negotiation,
-        invoiced,
-        paid,
-        shipped,
-        obtained
+        registered=1,
+        negotiation=2,
+        invoiced=3,
+        paid=4,
+        shipped=5,
+        obtained=6
     }
 }
